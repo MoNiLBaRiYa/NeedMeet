@@ -1,0 +1,74 @@
+[
+  {
+    "id": "prof_1",
+    "fullName": "Anjali Sharma",
+    "categoryId": "cat_cleaning",
+    "image": "/images/pros/anjali.png",
+    "bio": "Experienced cleaner with over 5 years in residential deep cleaning. I specialize in making your living space shine with eco-friendly products.",
+    "rating": 4.8,
+    "reviewCount": 24,
+    "pricing": {
+      "base": 40,
+      "unit": "hour"
+    },
+    "services": [
+      { "id": "ser_1_1", "name": "Basic Home Cleaning", "price": 40 },
+      { "id": "ser_1_2", "name": "Deep Sanitization", "price": 120 }
+    ],
+    "location": { "city": "Mumbai", "distance": 2.5 }
+  },
+  {
+    "id": "prof_2",
+    "fullName": "Rajesh Iyer",
+    "categoryId": "cat_plumbing",
+    "image": "/images/pros/rajesh.png",
+    "bio": "Licensed plumber specializing in emergency repairs and leak detection. Quick response time and quality workmanship guaranteed.",
+    "rating": 4.9,
+    "reviewCount": 115,
+    "pricing": {
+      "base": 60,
+      "unit": "visit"
+    },
+    "services": [
+      { "id": "ser_2_1", "name": "Leak Repair", "price": 60 },
+      { "id": "ser_2_2", "name": "Full Plumbing Inspection", "price": 100 }
+    ],
+    "location": { "city": "Chennai", "distance": 4.2 }
+  },
+  {
+    "id": "prof_3",
+    "fullName": "Priya Gupta",
+    "categoryId": "cat_tutoring",
+    "image": "/images/pros/priya.png",
+    "bio": "Professional educator teaching Mathematics and Science to high school students. I focus on conceptual clarity and student growth.",
+    "rating": 5.0,
+    "reviewCount": 42,
+    "pricing": {
+      "base": 50,
+      "unit": "hour"
+    },
+    "services": [
+      { "id": "ser_3_1", "name": "High School Maths", "price": 50 },
+      { "id": "ser_3_2", "name": "Science Coaching", "price": 50 }
+    ],
+    "location": { "city": "Delhi", "distance": 1.1 }
+  },
+  {
+    "id": "prof_4",
+    "fullName": "Siddharth Malhotra",
+    "categoryId": "cat_electrical",
+    "image": "/images/pros/siddharth.png",
+    "bio": "Certified electrician with expertise in smart home installations and wiring repairs. Safe, reliable, and efficient electrical solutions.",
+    "rating": 4.7,
+    "reviewCount": 89,
+    "pricing": {
+      "base": 75,
+      "unit": "hour"
+    },
+    "services": [
+      { "id": "ser_4_1", "name": "Smart Switch Install", "price": 75 },
+      { "id": "ser_4_2", "name": "Wiring Inspection", "price": 50 }
+    ],
+    "location": { "city": "Bangalore", "distance": 3.8 }
+  }
+]

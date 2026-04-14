@@ -1,0 +1,51 @@
+[
+  {
+    "id": "cat_cleaning",
+    "name": "Home Cleaning",
+    "slug": "home-cleaning",
+    "icon": "sparkles",
+    "description": "Professional house cleaning and deep sanitization services."
+  },
+  {
+    "id": "cat_plumbing",
+    "name": "Plumbing",
+    "slug": "plumbing",
+    "icon": "wrench",
+    "description": "Fix leaks, pipe bursts, and drainage issues instantly."
+  },
+  {
+    "id": "cat_electrical",
+    "name": "Electrical",
+    "slug": "electrical",
+    "icon": "bolt",
+    "description": "Expert repairs for wiring, appliances, and power issues."
+  },
+  {
+    "id": "cat_tutoring",
+    "name": "Tutor and Teaching",
+    "slug": "tutor-and-teaching",
+    "icon": "academic-cap",
+    "description": "Private lessons for academics, coding, and creative arts."
+  },
+  {
+    "id": "cat_wellness",
+    "name": "Wellness",
+    "slug": "wellness",
+    "icon": "heart",
+    "description": "Yoga, fitness coaching, and mental well-being sessions."
+  },
+  {
+    "id": "cat_gardening",
+    "name": "Gardening",
+    "slug": "gardening",
+    "icon": "sun",
+    "description": "Lawn care, landscaping, and plant maintenance services."
+  },
+  {
+    "id": "cat_tech",
+    "name": "Tech Support",
+    "slug": "tech-support",
+    "icon": "computer-desktop",
+    "description": "On-site and remote assistance for gadgets and software."
+  }
+]
