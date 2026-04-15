@@ -55,16 +55,9 @@ const sortBy = ref('recommended');
 
 const sortedProfessionals = computed(() => {
   const result = [...professionals.value];
-  if (sortBy.value === 'price-low') return result.sort((a, b) =>
-  { a.pricing.base - b.pricing.base
-
-  });
-  if (sortBy.value === 'price-high') return result.sort((a, b) =>{
-    b.pricing.base - a.pricing.base
-  });
-  if (sortBy.value === 'rating') return result.sort((a, b) => {
-    b.rating - a.rating
-  });
+  if (sortBy.value === 'price-low') return result.sort((a, b) => a.pricing.base - b.pricing.base);
+  if (sortBy.value === 'price-high') return result.sort((a, b) => b.pricing.base - a.pricing.base);
+  if (sortBy.value === 'rating') return result.sort((a, b) => b.rating - a.rating);
   return result;
 });
 

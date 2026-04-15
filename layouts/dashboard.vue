@@ -7,9 +7,6 @@
         <span class="font-bold text-slate-900">NeedMeet</span>
       </NuxtLink>
       <div class="flex items-center gap-3">
-        <span class="px-2.5 py-1 text-xs font-black uppercase tracking-widest bg-[#C1ED00]/20 text-slate-700 rounded-lg">
-          {{ authStore.role }}
-        </span>
         <span class="text-sm font-bold text-slate-900">
           {{ authStore.fullName || authStore.user?.displayName || authStore.user?.email?.split('@')[0] || 'User' }}
         </span>
