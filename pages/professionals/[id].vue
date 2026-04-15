@@ -10,20 +10,10 @@
           Back to browsing
         </NuxtLink>
 
-        <!-- Profile Loading State -->
-        <div v-if="loading" class="animate-pulse flex flex-col md:flex-row gap-12 items-center">
-          <div class="w-48 h-48 bg-slate-800 rounded-[2.5rem]"></div>
-          <div class="space-y-4 flex-1">
-            <div class="h-10 bg-slate-800 rounded-xl w-64"></div>
-            <div class="h-6 bg-slate-800 rounded-xl w-32"></div>
-            <div class="h-20 bg-slate-800 rounded-xl w-full"></div>
-          </div>
-        </div>
-
-        <!-- Profile Loaded State -->
-        <div v-else-if="professional" class="flex flex-col md:flex-row gap-12 items-start">
+        <!-- Profile card -->
+        <div v-if="professional" class="flex flex-col md:flex-row gap-12 items-start">
           <div class="w-48 h-48 flex-shrink-0 bg-white rounded-[2.5rem] overflow-hidden border-4 border-[#C1ED00] shadow-2xl">
-            <img :src="resolveImagePath(professional.image)" :alt="professional.fullName" class="w-full h-full object-cover" />
+            <img :src="professional.image || '/images/default.jpg'" :alt="professional.fullName" class="w-full h-full object-cover" />
           </div>
           <div class="flex-1 space-y-6">
             <h1 class="text-4xl md:text-6xl font-black text-white tracking-tight">{{ professional.fullName }}</h1>
@@ -39,10 +29,10 @@
       </div>
     </section>
 
-    <!-- Main Content -->
+    <!-- Main -->
     <main class="container mx-auto max-w-5xl px-6 -mt-16 pb-24">
       <div v-if="professional" class="grid grid-cols-1 lg:grid-cols-3 gap-12">
-        <!-- Sidebar / Action Area -->
+        <!--sidebar-->
         <div class="lg:col-span-1 space-y-6">
           <div class="bg-white p-8 rounded-[2.5rem] shadow-xl shadow-slate-200/50 border border-gray-100 sticky top-24">
             <div class="mb-8">
@@ -88,7 +78,7 @@
       </div>
 
       <!-- Not Found State -->
-      <div v-else-if="!loading" class="text-center py-32 space-y-8 bg-white rounded-[3rem] border border-gray-100 shadow-xl">
+      <div v-if="!professional" class="text-center py-32 space-y-8 bg-white rounded-[3rem] border border-gray-100 shadow-xl">
         <div class="text-7xl">🤔</div>
         <h2 class="text-3xl font-black text-slate-900">Professional Not Found</h2>
         <p class="text-gray-500 max-w-sm mx-auto">The expert you're looking for might have moved or is currently unavailable.</p>
@@ -101,9 +91,6 @@
 </template>
 
 <script setup>
-import { mockApi } from '../../utils/mockApi';
-import { resolveImagePath } from '../../utils/pathResolver';
-
 const route = useRoute();
 const router = useRouter();
 
@@ -112,10 +99,8 @@ const loading = ref(true);
 
 const fetchPro = async () => {
   loading.value = true;
-  const data = await mockApi.getProfessionalById(route.params.id);
-  if (data) {
-    professional.value = data;
-  }
+  const allProfessionals = await $fetch('/mock-data/professionals.json');
+  professional.value = allProfessionals.find(p => p.id === route.params.id) || null;
   loading.value = false;
 };
 
@@ -136,3 +121,4 @@ useHead({
   title: professional.value ? `${professional.value.fullName} - NeedMeet` : 'Professional Profile'
 });
 </script>
+

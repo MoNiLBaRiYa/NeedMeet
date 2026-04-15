@@ -8,8 +8,12 @@
     </div>
     <!-- Detailed Text -->
     <div v-if="showDetailed" class="flex items-center gap-2 text-sm">
-      <span class="font-black text-slate-900">{{ rating }}</span>
-      <span class="text-gray-400">({{ count }} reviews)</span>
+      <span class="font-black text-slate-900">
+        {{ rating }}
+      </span>
+      <span class="text-gray-400">
+        ({{ count }} reviews)
+      </span>
     </div>
   </div>
 </template>

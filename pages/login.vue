@@ -20,6 +20,6 @@
 import LoginForm from '../components/auth/LoginForm.vue';
 
 definePageMeta({
-  layout: 'auth', // we can use an auth layout if it exists, or just default. I'll leave it simple.
+  layout: 'auth',
 });
 </script>

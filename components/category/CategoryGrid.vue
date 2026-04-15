@@ -2,10 +2,17 @@
   <div class="py-12">
     <div class="flex justify-between items-end mb-8">
       <div>
-        <h2 class="text-3xl font-extrabold text-slate-900 tracking-tight">Explore Categories</h2>
-        <p class="text-gray-500 mt-2">Find the right expertise for your every need.</p>
+        <h2 class="text-3xl font-extrabold text-slate-900 tracking-tight">
+          Explore Categories
+        </h2>
+        <p class="text-gray-500 mt-2">
+          Find the right expertise for your every need
+
+        </p>
       </div>
-      <div v-if="loading" class="text-sm text-gray-400 animate-pulse">Loading categories...</div>
+      <div v-if="loading" class="text-sm text-gray-400 animate-pulse">
+        Loading categories...
+      </div>
     </div>
 
     <!-- Error State -->
@@ -14,7 +21,6 @@
       <button @click="fetchCategories" class="block mx-auto mt-4 text-sm font-bold underline">Try again</button>
     </div>
 
-    <!-- Grid -->
     <div v-else class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-6">
       <template v-if="filteredCategories.length > 0">
         <CategoryCard
@@ -33,8 +39,6 @@
 </template>
 
 <script setup>
-import { mockApi } from '~/utils/mockApi';
-
 const props = defineProps({
   searchQuery: {
     type: String,
@@ -47,13 +51,12 @@ const loading = ref(true);
 const error = ref(null);
 
 const fetchCategories = async () => {
-  loading.ref = true;
+  loading.value = true;
   error.value = null;
   try {
-    categories.value = await mockApi.getCategories();
+    categories.value = await $fetch('/mock-data/categories.json');
   } catch (err) {
     error.value = 'Failed to load categories. Please try again later.';
-    console.error(err);
   } finally {
     loading.value = false;
   }
@@ -72,3 +75,4 @@ onMounted(() => {
   fetchCategories();
 });
 </script>
+

@@ -4,7 +4,9 @@
       <h1 class="text-3xl font-black text-slate-900">
         Professional Dashboard
       </h1>
-      <p class="text-gray-500 text-sm">Manage your service requests and earnings.</p>
+      <p class="text-gray-500 text-sm">
+        Manage your service requests and earnings
+      </p>
     </header>
 
     <!-- Stats Grid -->
@@ -23,7 +25,9 @@
     <!-- Requests List -->
     <section class="space-y-6">
       <div class="pb-4 border-b border-gray-100">
-        <h2 class="text-xl font-bold text-slate-900">Service Requests</h2>
+        <h2 class="text-xl font-bold text-slate-900">
+          Service Requests
+        </h2>
       </div>
 
       <DashboardProfessionalRequestList 
@@ -57,11 +61,14 @@ const pendingCount = computed(() => {
   return bookingStore.bookings.filter(b => b.status === 'pending').length;
 });
 
+const { addPopup } = useMessagePopup();
+
 const updateBookingStatus = async (id, status) => {
   try {
     await bookingStore.updateStatus(id, status);
+    addPopup(`Booking ${status} successfully!`, 'success');
   } catch (err) {
-    alert(err.message || 'Failed to update status');
+    addPopup(err.message || 'Failed to update status', 'error');
   }
 };
 

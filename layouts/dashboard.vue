@@ -6,9 +6,13 @@
         <div class="w-8 h-8 bg-[#C1ED00] rounded-lg flex items-center justify-center font-black text-slate-900">N</div>
         <span class="font-bold text-slate-900">NeedMeet</span>
       </NuxtLink>
-      <div class="flex items-center gap-4">
-        <span class="text-xs font-semibold text-gray-400 uppercase tracking-widest">{{ authStore.role }}</span>
-        <div class="w-8 h-8 bg-slate-100 rounded-full border border-gray-200"></div>
+      <div class="flex items-center gap-3">
+        <span class="px-2.5 py-1 text-xs font-black uppercase tracking-widest bg-[#C1ED00]/20 text-slate-700 rounded-lg">
+          {{ authStore.role }}
+        </span>
+        <span class="text-sm font-bold text-slate-900">
+          {{ authStore.fullName || authStore.user?.displayName || authStore.user?.email?.split('@')[0] || 'User' }}
+        </span>
       </div>
     </nav>
 
@@ -24,19 +28,21 @@
           >
             Overview
           </NuxtLink>
+
           <NuxtLink 
-            to="/dashboard/bookings" 
-            class="flex items-center gap-3 px-4 py-3 text-sm font-medium text-gray-500 hover:text-slate-900 hover:bg-gray-50 rounded-xl transition-colors"
-            active-class="bg-[#C1ED00] text-slate-900 shadow-sm"
-          >
-            My Bookings
-          </NuxtLink>
-          <NuxtLink 
-            to="/dashboard/profile" 
+            to="/profile" 
             class="flex items-center gap-3 px-4 py-3 text-sm font-medium text-gray-500 hover:text-slate-900 hover:bg-gray-50 rounded-xl transition-colors"
             active-class="bg-[#C1ED00] text-slate-900 shadow-sm"
           >
             Account
+          </NuxtLink>
+
+          <NuxtLink 
+            to="/BrowseProfessionals" 
+            class="flex items-center gap-3 px-4 py-3 text-sm font-medium text-gray-500 hover:text-slate-900 hover:bg-gray-50 rounded-xl transition-colors"
+            active-class="bg-[#C1ED00] text-slate-900 shadow-sm"
+          >
+            Browse Professionals
           </NuxtLink>
         </div>
 

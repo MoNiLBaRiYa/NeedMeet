@@ -3,49 +3,49 @@
     "id": "cat_home",
     "name": "Home Services",
     "pageLink": "home-services",
-    "image": "public/images/category/home-service.png",
+    "image": "/images/category/home-service.png",
     "description": "Top-rated services in Home Services localized for you."
   },
   {
     "id": "cat_beauty",
     "name": "Beauty & Wellness",
     "pageLink": "beauty-wellness",
-    "image": "public/images/category/beauty-and-wellness.png",
+    "image": "/images/category/beauty-and-wellness.png",
     "description": "Top-rated services in Beauty & Wellness localized for you."
   },
   {
     "id": "cat_business",
     "name": "Business & Professional Services",
     "pageLink": "business-professional",
-    "image": "public/images/category/business-and-professional-services.png",
+    "image": "/images/category/business-and-professional-services.png",
     "description": "Top-rated services in Business & Professional Services localized for you."
   },
   {
     "id": "cat_event",
     "name": "Event & Entertainment Services",
     "pageLink": "event-entertainment",
-    "image": "public/images/category/event-and-entertainment.png",
+    "image": "/images/category/event-and-entertainment.png",
     "description": "Top-rated services in Event & Entertainment Services localized for you."
   },
   {
     "id": "cat_auto",
     "name": "Automotive Services",
     "pageLink": "automotive",
-    "image": "public/images/category/automotive.png",
+    "image": "/images/category/automotive.png",
     "description": "Top-rated services in Automotive Services localized for you."
   },
   {
     "id": "cat_edu",
     "name": "Educational Services",
     "pageLink": "educational",
-    "image": "public/images/category/educational.png",
+    "image": "/images/category/educational.png",
     "description": "Top-rated services in Educational Services localized for you."
   },
   {
     "id": "cat_health",
     "name": "Health & Medical Services",
     "pageLink": "health-medical",
-    "image": "public/images/category/health-and-medical.png",
+    "image": "/images/category/health-and-medical.png",
     "description": "Top-rated services in Health & Medical Services localized for you."
   }
 ]

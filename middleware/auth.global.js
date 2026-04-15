@@ -1,14 +1,14 @@
-export default defineNuxtRouteMiddleware((to, from) => {
+export default defineNuxtRouteMiddleware((to) => {
   const authStore = useAuthStore();
-  
-  // Only protect routes starting with /dashboard
+
+  // Protect dashboard routes : redirect to login if not authenticated
   if (to.path.startsWith('/dashboard')) {
     if (!authStore.isLoggedIn) {
       return navigateTo('/login');
     }
   }
 
-  // Redirect logged-in users away from login/register
+  // Redirect authenticated users away from login or register 
   if ((to.path === '/login' || to.path === '/register') && authStore.isLoggedIn) {
     return navigateTo('/dashboard');
   }

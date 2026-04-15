@@ -6,7 +6,7 @@
     <div class="flex items-start gap-4">
       <div class="w-20 h-20 shrink-0 rounded-2xl bg-slate-50 overflow-hidden border border-slate-100 group-hover:border-[#C1ED00] transition-all duration-300">
         <img 
-          :src="resolveImagePath(subcategory.image)" 
+          :src="subcategory.image || '/images/default.jpg'" 
           :alt="subcategory.name"
           loading="lazy"
           class="w-full h-full object-cover group-hover:scale-110 transition-transform duration-500"
@@ -14,7 +14,10 @@
         />
       </div>
       <div>
-        <h3 class="font-bold text-slate-900 text-lg mb-1 group-hover:text-[#C1ED00] transition-colors">{{ subcategory.name }}</h3>
+        <h3 class="font-bold text-slate-900 text-lg mb-1 group-hover:text-[#C1ED00] transition-colors">
+         
+          {{ subcategory.name }}
+      </h3>
         <p class="text-gray-500 text-sm line-clamp-2 leading-relaxed">
           {{ subcategory.description || 'Explore top professionals for your needs.' }}
         </p>
@@ -24,7 +27,6 @@
 </template>
 
 <script setup>
-import { resolveImagePath } from '../../utils/pathResolver';
 
 defineProps({
   subcategory: {

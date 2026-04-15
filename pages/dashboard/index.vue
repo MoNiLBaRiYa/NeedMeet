@@ -2,7 +2,9 @@
   <div class="min-h-screen bg-gray-50 flex items-center justify-center">
     <div class="text-center space-y-4">
       <div class="animate-spin w-8 h-8 border-4 border-slate-900 border-t-transparent rounded-full mx-auto"></div>
-      <p class="text-gray-500 font-medium">Redirecting to your dashboard...</p>
+      <p class="text-gray-500 font-medium">
+        Redirecting to your dashboard...
+      </p>
     </div>
   </div>
 </template>

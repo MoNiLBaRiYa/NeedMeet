@@ -1,5 +1,6 @@
 <template>
   <div class="min-h-screen bg-gray-50 flex items-center justify-center p-6">
+    <UiMessagePopup />
     <div class="w-full max-w-md">
       <!-- Back to Home Link -->
       <NuxtLink to="/" class="inline-flex items-center text-sm font-medium text-gray-500 hover:text-slate-900 mb-8 transition-colors">
@@ -17,5 +18,4 @@
 </template>
 
 <script setup>
-// Auth layout for login/register
 </script>

@@ -1,12 +1,7 @@
 <template>
   <div class="container mx-auto px-6 py-12">
-    <!-- Loading State -->
-    <div v-if="loading" class="text-center py-20">
-      <p class="text-lg font-medium text-gray-500 animate-pulse">Loading...</p>
-    </div>
-
     <!-- Error State -->
-    <div v-else-if="error || !category" class="text-center py-20 space-y-4">
+    <div v-if="error || !category" class="text-center py-20 space-y-4">
 
       <h2 class="text-2xl font-bold text-slate-900">Category not found</h2>
       <p class="text-gray-500">
@@ -17,19 +12,20 @@
       </NuxtLink>
     </div>
 
-
     <div v-else class="space-y-8">
       <header class="pb-8 border-b border-gray-100">
-        <div class="flex items-center gap-4 mb-4">
-          <div class="p-3 bg-slate-900 rounded-2xl text-[#C1ED00]">
-            <CommonIcon :name="category.icon" />
-          </div>
-          <h1 class="text-4xl font-black text-slate-900 tracking-tight">{{ category.name }}</h1>
+        <div class="mb-4">
+          <h1 class="text-4xl font-black text-slate-900 tracking-tight">
+            {{ category.name }}
+          </h1>
         </div>
-        <p class="text-lg text-gray-500 max-w-2xl leading-relaxed">{{ category.description || 'Explore subcategories below.' }}</p>
+
+        <p class="text-lg text-gray-500 max-w-2xl leading-relaxed">
+          {{ category.description || 'Explore subcategories below.' }}
+        </p>
       </header>
 
-      <!-- Results Grid -->
+      <!-- Result -->
       <section>
              <div class="flex items-center justify-between mb-8">
           <h2 class="text-xl font-bold text-slate-900">
@@ -45,7 +41,7 @@
         <div v-else class="text-center py-20 bg-gray-50 rounded-[3rem] border border-dashed border-gray-200">
           <p class="text-gray-400 font-medium">
             
-            No services found in this category yet.</p>
+            No services found in this category</p>
         </div>
       </section>
     </div>
@@ -53,8 +49,6 @@
 </template>
 
 <script setup>
-import { mockApi } from '../../utils/mockApi';
-
 const route = useRoute();
 const pageLink = route.params.pageLink;
 
@@ -66,19 +60,16 @@ const error = ref(null);
 const loadData = async () => {
   loading.value = true;
   try {
-    const allCategories = await mockApi.getCategories();
+    const allCategories = await $fetch('/mock-data/categories.json');
     category.value = allCategories.find(c => c.pageLink === pageLink);
 
     if (category.value) {
-      subcategories.value = await mockApi.getSubcategories(category.value.id);
+      const allSubcategories = await $fetch('/mock-data/subcategories.json');
+      subcategories.value = allSubcategories.filter(s => s.categoryId === category.value.id);
     }
-
-
   } catch (err) {
-    console.error('Failed to load category data:', err);
     error.value = err.message;
-  } 
-  finally {
+  } finally {
     loading.value = false;
   }
 };
@@ -87,3 +78,4 @@ onMounted(() => {
   loadData();
 });
 </script>
+

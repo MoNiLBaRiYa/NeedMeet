@@ -1,5 +1,5 @@
 import { defineStore } from 'pinia';
-import { mockApi } from '../utils/mockApi';
+import { firestoreApi } from '../utils/firestoreApi';
 import { useAuthStore } from './auth';
 
 export const useBookingStore = defineStore('booking', () => {
@@ -12,13 +12,15 @@ export const useBookingStore = defineStore('booking', () => {
     error.value = null;
     try {
       const authStore = useAuthStore();
-      const userId = authStore.user?.id;
+      const userId = authStore.user?.uid;
       const role = authStore.role;
       
-      bookings.value = await mockApi.getBookings(userId, role);
+      if (!userId) return;
+      
+      bookings.value = await firestoreApi.getBookings(userId, role);
     } catch (err) {
+      console.error('Failed to fetch bookings:', err);
       error.value = 'Failed to load bookings.';
-      console.error(err);
     } finally {
       loading.value = false;
     }
@@ -28,18 +30,19 @@ export const useBookingStore = defineStore('booking', () => {
     loading.value = true;
     error.value = null;
     try {
-      const updatedBooking = await mockApi.updateBookingStatus(id, status);
-      if (updatedBooking) {
-        // Update local state for immediate UI feedback
-        const index = bookings.value.findIndex(b => b.id === id);
-        if (index !== -1) {
-          bookings.value[index] = updatedBooking;
-        }
+      await firestoreApi.updateBookingStatus(id, status);
+      
+      // Update local 
+      const index = bookings.value.findIndex(b => b.id === id);
+      if (index !== -1) {
+
+        bookings.value[index] = { ...bookings.value[index], status, updatedAt: new Date().toISOString() };
+        
       }
-      return updatedBooking;
     } catch (err) {
+
       error.value = `Failed to update booking to ${status}.`;
-      console.error(err);
+
       throw err;
     } finally {
       loading.value = false;
@@ -50,16 +53,19 @@ export const useBookingStore = defineStore('booking', () => {
     loading.value = true;
     error.value = null;
     try {
-      const newBooking = await mockApi.createBooking(bookingData);
-      bookings.value.push(newBooking);
+      const newBooking = await firestoreApi.createBooking(bookingData);
+      bookings.value.unshift(newBooking);
       return newBooking;
     } catch (err) {
       error.value = 'Failed to create booking.';
-      console.error(err);
       throw err;
     } finally {
       loading.value = false;
     }
+  }
+
+  async function cancelBooking(id) {
+    return updateStatus(id, 'cancelled');
   }
 
   return {
@@ -67,6 +73,8 @@ export const useBookingStore = defineStore('booking', () => {
     loading,
     error,
     fetchBookings,
-    createBooking
+    updateStatus,
+    createBooking,
+    cancelBooking
   };
 });

@@ -1,43 +1,42 @@
 <template>
   <div class="container mx-auto px-6 py-12">
-    <!-- Loading State -->
-    <div v-if="loading" class="text-center py-20">
-      <p class="text-lg font-medium text-gray-500 animate-pulse">Loading professionals...</p>
-    </div>
-
     <!-- Error State -->
-    <div v-else-if="error || !subcategory" class="text-center py-20 space-y-4">
-      <div class="text-5xl">😕</div>
-      <h2 class="text-2xl font-bold text-slate-900">Subcategory not found</h2>
-      <p class="text-gray-500">The service you're looking for doesn't exist.</p>
+    <div v-if="error || !subcategory" class="text-center py-20 space-y-4">
+      <h2 class="text-2xl font-bold text-slate-900">
+        Subcategory not found
+      </h2>
+      <p class="text-gray-500">
+    The service you're looking for doesn't exist.
+        </p>
       <NuxtLink to="/" class="inline-block px-6 py-3 bg-[#C1ED00] text-slate-900 font-bold rounded-xl hover:shadow-lg transition-all">
         Back to Home
       </NuxtLink>
     </div>
 
-    <!-- Content State -->
+    <!-- Content  -->
     <div v-else class="space-y-8">
-      <!-- Header -->
       <header class="pb-8 border-b border-gray-100 flex items-center justify-between">
         <div>
-          <NuxtLink :to="`/categories/${categoryPageLink}`" class="text-gray-400 hover:text-[#C1ED00] text-sm font-bold mb-2 inline-block transition-colors">
+          <NuxtLink :to="`/categories/${categoryPageLink}`" class="text-gray-400 hover:text-[#C1ED00] text-sm font-bold mb-2 inline-block transition-colors"> 
             &larr; Back to Category
           </NuxtLink>
-          <div class="flex items-center gap-4 mt-2 mb-4">
-            <div class="p-3 bg-slate-900 rounded-2xl text-[#C1ED00]">
-              <CommonIcon :name="subcategory.icon || 'sparkles'" />
-            </div>
-            <h1 class="text-4xl font-black text-slate-900 tracking-tight">{{ subcategory.name }}</h1>
+          <div class="mt-2 mb-4">
+            <h1 class="text-4xl font-black text-slate-900 tracking-tight">
+              {{ subcategory.name }}
+            </h1>
           </div>
-          <p class="text-lg text-gray-500 max-w-2xl leading-relaxed">{{ subcategory.description }}</p>
+          <p class="text-lg text-gray-500 max-w-2xl leading-relaxed">
+            {{ subcategory.description }}
+          </p>
         </div>
       </header>
 
-      <!-- Results Grid -->
+      <!-- Result -->
       <section>
         <div class="flex flex-col md:flex-row md:items-center justify-between gap-4 mb-12 py-6 border-y border-gray-100">
           <h2 class="text-xl font-bold text-slate-900">
-            {{ sortedProfessionals.length }} Professionals Available
+            {{ sortedProfessionals.length }}
+             Professionals Available
           </h2>
           
           <div class="flex items-center gap-4">
@@ -56,11 +55,7 @@
         </div>
 
         <div v-if="sortedProfessionals.length > 0" class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
-          <ProfessionalCard 
-            v-for="prof in sortedProfessionals" 
-            :key="prof.id" 
-            :professional="prof" 
-          />
+          <ProfessionalCard  v-for="prof in sortedProfessionals"  :key="prof.id" :professional="prof" />
         </div>
         
         <div v-else class="text-center py-20 bg-gray-50 rounded-[3rem] border border-dashed border-gray-200">
@@ -72,8 +67,6 @@
 </template>
 
 <script setup>
-import { mockApi } from '../../utils/mockApi';
-
 const route = useRoute();
 const pageLink = route.params.pageLink;
 
@@ -86,35 +79,27 @@ const sortBy = ref('recommended');
 
 const sortedProfessionals = computed(() => {
   const result = [...professionals.value];
-  
-  if (sortBy.value === 'price-low') {
-    return result.sort((a, b) => a.pricing.base - b.pricing.base);
-  } else if (sortBy.value === 'price-high') {
-    return result.sort((a, b) => b.pricing.base - a.pricing.base);
-  } else if (sortBy.value === 'rating') {
-    return result.sort((a, b) => b.rating - a.rating);
-  }
-  
+  if (sortBy.value === 'price-low') return result.sort((a, b) => a.pricing.base - b.pricing.base);
+  if (sortBy.value === 'price-high') return result.sort((a, b) => b.pricing.base - a.pricing.base);
+  if (sortBy.value === 'rating') return result.sort((a, b) => b.rating - a.rating);
   return result;
 });
 
 const loadData = async () => {
   loading.value = true;
   try {
-    const allSubcategories = await mockApi.getSubcategories();
+    const allSubcategories = await $fetch('/mock-data/subcategories.json');
     subcategory.value = allSubcategories.find(s => s.pageLink === pageLink);
 
     if (subcategory.value) {
-      // Find the parent category pageLink for the back button
-      const allCategories = await mockApi.getCategories();
+      const allCategories = await $fetch('/mock-data/categories.json');
       const parentCat = allCategories.find(c => c.id === subcategory.value.categoryId);
       if (parentCat) categoryPageLink.value = parentCat.pageLink;
 
-      // Fetch professionals
-      professionals.value = await mockApi.getProfessionals(subcategory.value.id);
+      const allProfessionals = await $fetch('/mock-data/professionals.json');
+      professionals.value = allProfessionals.filter(p => p.subcategoryId === subcategory.value.id);
     }
   } catch (err) {
-    console.error('Failed to load subcategory data:', err);
     error.value = err.message;
   } finally {
     loading.value = false;
@@ -125,3 +110,4 @@ onMounted(() => {
   loadData();
 });
 </script>
+

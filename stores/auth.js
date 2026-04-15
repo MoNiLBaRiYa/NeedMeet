@@ -1,25 +1,27 @@
 import { defineStore } from 'pinia';
+import { firestoreApi } from '../utils/firestoreApi';
+
 export const useAuthStore = defineStore('auth', {
   state: () => ({
     user: null,
     loading: false,
     error: null,
-    role: null, // 'customer' or 'professional'
+    role: null, 
     initialized: false,
-    profileOverrides: {
-      fullName: null,
-      phone: null
-    }
+    fullName: null,
+    phone: null
   }),
   getters: {
     isLoggedIn: (state) => !!state.user,
-    // Merged user data for UI display
     userData: (state) => {
       if (!state.user) return null;
       return {
-        ...state.user,
-        fullName: state.profileOverrides.fullName || state.user.displayName || 'User',
-        phone: state.profileOverrides.phone || state.user.phoneNumber || ''
+        uid: state.user.uid,
+        email: state.user.email,
+        // Return raw value so templates react correctly after save
+        fullName: state.fullName || '',
+        phone: state.phone || '',
+        role: state.role
       };
     }
   },
@@ -27,22 +29,13 @@ export const useAuthStore = defineStore('auth', {
     async initAuth() {
       if (!process.client) return;
       
-      // Load local overrides
-      const { getItem } = useLocalStorage();
-      const overrides = getItem('needmeet_profile_overrides');
-      if (overrides) {
-        this.profileOverrides = overrides;
-      }
-
       try {
         const { onAuthStateChanged } = await import('firebase/auth');
-        const { doc, getDoc } = await import('firebase/firestore');
-        
         const nuxtApp = useNuxtApp();
-        const { $firebaseAuth, $firebaseDb } = nuxtApp;
+        const { $firebaseAuth } = nuxtApp;
         
         if (!$firebaseAuth) {
-          console.warn('Firebase Auth ($firebaseAuth) is not available yet.');
+          this.initialized = true;
           return;
         }
 
@@ -51,40 +44,58 @@ export const useAuthStore = defineStore('auth', {
           try {
             if (firebaseUser) {
               this.user = firebaseUser;
-
-              // Role fetch
-              const userDocRef = doc($firebaseDb, 'users', firebaseUser.uid);
-              const docSnap = await getDoc(userDocRef);
-              if (docSnap.exists()) {
-                this.role = docSnap.data().role;
+              
+              // Fetch user profile from Firestore
+              const profile = await firestoreApi.getUserProfile(firebaseUser.uid);
+              if (profile) {
+                // Only overwrite role if Firestore actually has one — never set it to undefined
+                if (profile.role) this.role = profile.role;
+                this.fullName = profile.fullName || '';
+                this.phone = profile.phone || '';
               }
             } else {
               this.user = null;
               this.role = null;
+              this.fullName = null;
+              this.phone = null;
             }
           } catch (err) {
-            console.error("Error in onAuthStateChanged listener:", err);
+            console.error('Error fetching user profile:', err);
           } finally {
             this.loading = false;
             this.initialized = true;
           }
         });
       } catch (err) {
-        console.error('Failed to initialize Auth store:', err);
+        console.error('Auth initialization failed:', err);
+        this.initialized = true;
       }
     },
+
     async updateProfileData(updatedData) {
-      if (!process.client) return;
+      if (!this.user) return;
       
-      const { setItem } = useLocalStorage();
-      this.profileOverrides = {
-        ...this.profileOverrides,
-        ...updatedData
-      };
-      
-      setItem('needmeet_profile_overrides', this.profileOverrides);
-      return this.profileOverrides;
+      this.loading = true;
+      try {
+        // Always include the current role so a missing Firestore field gets restored
+        await firestoreApi.updateUserProfile(this.user.uid, {
+          ...updatedData,
+          ...(this.role ? { role: this.role } : {})
+        });
+        
+        // Update local state
+        if (updatedData.fullName !== undefined) this.fullName = updatedData.fullName;
+        if (updatedData.phone !== undefined) this.phone = updatedData.phone;
+        
+        return true;
+      } catch (err) {
+        this.error = 'Failed to update profile.';
+        throw err;
+      } finally {
+        this.loading = false;
+      }
     },
+
     async login(email, password) {
       this.loading = true;
       this.error = null;
@@ -93,6 +104,16 @@ export const useAuthStore = defineStore('auth', {
         const { user, role } = await loginUser(email, password);
         this.user = user;
         this.role = role;
+        
+        // Fetch full profile immediately
+        const profile = await firestoreApi.getUserProfile(user.uid);
+        if (profile) {
+          this.fullName = profile.fullName || '';
+          this.phone = profile.phone || '';
+          
+          // Sync role from Firestore too — avoids timing race with onAuthStateChanged
+          if (profile.role) this.role = profile.role;
+        }
       } catch (err) {
         this.error = err.message;
         throw err;
@@ -100,14 +121,17 @@ export const useAuthStore = defineStore('auth', {
         this.loading = false;
       }
     },
-    async register(email, password, role) {
+
+    async register(email, password, role, fullName = '') {
       this.loading = true;
       this.error = null;
       try {
         const { registerUser } = useAuth();
-        const { user, role: savedRole } = await registerUser(email, password, role);
+        const { user, role: savedRole } = await registerUser(email, password, role, fullName);
         this.user = user;
         this.role = savedRole;
+        this.fullName = fullName;
+        this.phone = '';
       } catch (err) {
         this.error = err.message;
         throw err;
@@ -115,14 +139,16 @@ export const useAuthStore = defineStore('auth', {
         this.loading = false;
       }
     },
+
     async logout() {
       this.loading = true;
-      this.error = null;
       try {
         const { logoutUser } = useAuth();
         await logoutUser();
         this.user = null;
         this.role = null;
+        this.fullName = null;
+        this.phone = null;
       } catch (err) {
         this.error = err.message;
       } finally {

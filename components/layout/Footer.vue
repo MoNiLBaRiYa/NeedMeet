@@ -19,19 +19,33 @@
         <div>
           <h4 class="font-bold text-slate-900 mb-6">Explore</h4>
           <ul class="space-y-4">
-            <li><NuxtLink to="/explore" class="text-gray-500 hover:text-slate-900 transition-colors">Browse Professionals</NuxtLink></li>
-            <li><NuxtLink to="/categories" class="text-gray-500 hover:text-slate-900 transition-colors">Categories</NuxtLink></li>
-            <li><NuxtLink to="/how-it-works" class="text-gray-500 hover:text-slate-900 transition-colors">How it Works</NuxtLink></li>
+            <li><NuxtLink to="/BrowseProfessionals" class="text-gray-500 hover:text-slate-900 transition-colors">
+              Browse Professionals
+            </NuxtLink></li>
+            <li><NuxtLink to="/categories" class="text-gray-500 hover:text-slate-900 transition-colors">
+              Categories
+            </NuxtLink></li>
+            <li><NuxtLink to="/how-it-works" class="text-gray-500 hover:text-slate-900 transition-colors">
+              How it Works
+            </NuxtLink></li>
           </ul>
         </div>
 
         <!-- Support -->
         <div>
-          <h4 class="font-bold text-slate-900 mb-6">Support</h4>
+          <h4 class="font-bold text-slate-900 mb-6">
+            Support
+          </h4>
           <ul class="space-y-4">
-            <li><NuxtLink to="/help" class="text-gray-500 hover:text-slate-900 transition-colors">Help Center</NuxtLink></li>
-            <li><NuxtLink to="/privacy" class="text-gray-500 hover:text-slate-900 transition-colors">Privacy Policy</NuxtLink></li>
-            <li><NuxtLink to="/terms" class="text-gray-500 hover:text-slate-900 transition-colors">Terms of Service</NuxtLink></li>
+            <li><NuxtLink to="/help" class="text-gray-500 hover:text-slate-900 transition-colors">
+              Help Center
+            </NuxtLink></li>
+            <li><NuxtLink to="/privacy" class="text-gray-500 hover:text-slate-900 transition-colors">
+              Privacy Policy
+            </NuxtLink></li>
+            <li><NuxtLink to="/terms" class="text-gray-500 hover:text-slate-900 transition-colors">
+              Terms of Service
+            </NuxtLink></li>
           </ul>
         </div>
       </div>
@@ -51,6 +65,4 @@
   </footer>
 </template>
 
-<script setup>
-// Footer component
-</script>
+
